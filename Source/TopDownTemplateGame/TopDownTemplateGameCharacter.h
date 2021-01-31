@@ -15,6 +15,7 @@ public:
 	ATopDownTemplateGameCharacter();
 
 	// Called every frame.
+	virtual void PostInitializeComponents() override;
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;;
 
@@ -29,6 +30,9 @@ protected:
 	void MoveUp(float Value);
 	void MoveRight(float Value);
 
+	void BeginSprint();
+	void EndSprint();
+
 private:
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -41,5 +45,13 @@ private:
 	/** A decal that projects to the cursor location. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UDecalComponent* CursorToWorld;
+
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Movement", meta=(ClampMin=0))
+	float WalkSpeed = 200.0f;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Movement", meta=(ClampMin=0))
+	float SprintSpeed = 500.0f;
+	
 };
 

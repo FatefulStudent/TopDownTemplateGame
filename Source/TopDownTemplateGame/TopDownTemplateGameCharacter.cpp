@@ -52,6 +52,13 @@ ATopDownTemplateGameCharacter::ATopDownTemplateGameCharacter()
 	PrimaryActorTick.bStartWithTickEnabled = true;
 }
 
+void ATopDownTemplateGameCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+}
+
 void ATopDownTemplateGameCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
@@ -74,6 +81,13 @@ void ATopDownTemplateGameCharacter::SetupPlayerInputComponent(UInputComponent* P
 
 	PlayerInputComponent->BindAxis("MoveUp", this, &ATopDownTemplateGameCharacter::MoveUp);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ATopDownTemplateGameCharacter::MoveRight);
+
+	// Jump
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
+
+	// Sprint
+	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ATopDownTemplateGameCharacter::BeginSprint);
+	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ATopDownTemplateGameCharacter::EndSprint);
 }
 
 void ATopDownTemplateGameCharacter::MoveUp(float Value)
@@ -81,6 +95,9 @@ void ATopDownTemplateGameCharacter::MoveUp(float Value)
 	if (Value != 0.0f)
 	{
 		// Abandon controller movement
+	    if (APlayerController* PC = Cast<APlayerController>(GetController()))
+	        PC->StopMovement();
+		
 		AddMovementInput(FVector::ForwardVector, Value);
 	}
 }
@@ -90,6 +107,19 @@ void ATopDownTemplateGameCharacter::MoveRight(float Value)
 	if (Value != 0.0f)
 	{
 		// Abandon controller movement
+		if (APlayerController* PC = Cast<APlayerController>(GetController()))
+			PC->StopMovement();
+		
 		AddMovementInput(FVector::RightVector, Value);
 	}
+}
+
+void ATopDownTemplateGameCharacter::BeginSprint()
+{
+	GetCharacterMovement()->MaxWalkSpeed = SprintSpeed;
+}
+
+void ATopDownTemplateGameCharacter::EndSprint()
+{
+	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 }
