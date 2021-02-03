@@ -94,9 +94,7 @@ void ATopDownTemplateGameCharacter::MoveUp(float Value)
 {
 	if (Value != 0.0f)
 	{
-		// Abandon controller movement
-	    if (APlayerController* PC = Cast<APlayerController>(GetController()))
-	        PC->StopMovement();
+		GetController()->StopMovement();
 		
 		AddMovementInput(FVector::ForwardVector, Value);
 	}
@@ -106,9 +104,7 @@ void ATopDownTemplateGameCharacter::MoveRight(float Value)
 {
 	if (Value != 0.0f)
 	{
-		// Abandon controller movement
-		if (APlayerController* PC = Cast<APlayerController>(GetController()))
-			PC->StopMovement();
+		GetController()->StopMovement();
 		
 		AddMovementInput(FVector::RightVector, Value);
 	}
