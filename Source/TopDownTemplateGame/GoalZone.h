@@ -21,6 +21,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category=Effects)
 	UParticleSystem* ParticleSystem;
 	
+	UPROPERTY(EditDefaultsOnly, Category=Effects)
+	bool bTickOverlap = false;
+	
+	UPROPERTY(EditDefaultsOnly, Category=Effects)
+	bool bNotifyActorOverlap = false;
+
+	UPROPERTY(EditDefaultsOnly, Category=Effects)
+	bool bComponentDelegateOverlap = false;
+	
 public:
 	AGoalZone();
 
