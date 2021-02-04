@@ -13,6 +13,7 @@ class ATopDownTemplateGameGameMode : public AGameModeBase
 
 public:
 	ATopDownTemplateGameGameMode();
+	void OnGoalScored();
 };
 
 

@@ -1,7 +1,6 @@
 ﻿#include "GoalZone.h"
-
-
 #include "SoccerBall.h"
+#include "TopDownTemplateGameGameMode.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -91,4 +90,9 @@ void AGoalZone::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor*
 void AGoalZone::OnBallOverlapped_Implementation(ASoccerBall* SoccerBall)
 {
 	UGameplayStatics::SpawnEmitterAttached(ParticleSystem, SoccerBall->GetRootComponent());
+
+	if (auto GameMode = GetWorld()->GetAuthGameMode<ATopDownTemplateGameGameMode>())
+	{
+		GameMode->OnGoalScored();
+	}
 }
