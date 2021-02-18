@@ -14,6 +14,9 @@ class ATopDownTemplateGameGameMode : public AGameModeBase
 public:
 	ATopDownTemplateGameGameMode();
 	void OnGoalScored();
+	void OnCharacterHitByDefender();
+private:
+	void RestartLevel();
 };
 
 

@@ -17,7 +17,15 @@ public:
 	// Called every frame.
 	virtual void PostInitializeComponents() override;
 	virtual void Tick(float DeltaSeconds) override;
-	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;;
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+	virtual void NotifyHit(UPrimitiveComponent* MyComp,
+		AActor* Other,
+		UPrimitiveComponent* OtherComp,
+		bool bSelfMoved,
+		FVector HitLocation,
+		FVector HitNormal,
+		FVector NormalImpulse,
+		const FHitResult& Hit) override;
 
 	/** Returns TopDownCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
@@ -45,6 +53,10 @@ protected:
 	/** A decal that projects to the cursor location. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	class UDecalComponent* CursorToWorld;
+	
+	/** A component that is responsible for noise making. */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
+	UPawnNoiseEmitterComponent* NoiseEmitterComponent;
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Movement", meta=(ClampMin=0))
@@ -52,6 +64,9 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Movement", meta=(ClampMin=0))
 	float SprintSpeed = 500.0f;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AActor> NoiseCauserActor; 
 	
 };
 

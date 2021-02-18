@@ -1,16 +1,13 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "TopDownTemplateGameCharacter.h"
-#include "UObject/ConstructorHelpers.h"
 #include "Camera/CameraComponent.h"
 #include "Components/DecalComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "GameFramework/PlayerController.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "HeadMountedDisplayFunctionLibrary.h"
-#include "Materials/Material.h"
-#include "Engine/World.h"
+#include "SoccerBall.h"
+#include "Components/PawnNoiseEmitterComponent.h"
 
 ATopDownTemplateGameCharacter::ATopDownTemplateGameCharacter()
 {
@@ -47,6 +44,8 @@ ATopDownTemplateGameCharacter::ATopDownTemplateGameCharacter()
 	CursorToWorld->DecalSize = FVector(16.0f, 32.0f, 32.0f);
 	CursorToWorld->SetRelativeRotation(FRotator(90.0f, 0.0f, 0.0f).Quaternion());
 
+	NoiseEmitterComponent = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("NoiseEmitterComponent"));
+	
 	// Activate ticking in order to update the cursor every frame.
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
@@ -88,6 +87,19 @@ void ATopDownTemplateGameCharacter::SetupPlayerInputComponent(UInputComponent* P
 	// Sprint
 	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ATopDownTemplateGameCharacter::BeginSprint);
 	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ATopDownTemplateGameCharacter::EndSprint);
+}
+
+void ATopDownTemplateGameCharacter::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other,
+	UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse,
+	const FHitResult& Hit)
+{
+	Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
+
+	if (Other->IsA(NoiseCauserActor))
+	{
+		MakeNoise(1.0f, this);
+	}
+	
 }
 
 void ATopDownTemplateGameCharacter::MoveUp(float Value)

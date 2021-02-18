@@ -14,10 +14,20 @@ ATopDownTemplateGameGameMode::ATopDownTemplateGameGameMode()
 
 void ATopDownTemplateGameGameMode::OnGoalScored()
 {
+	RestartLevel();
+}
+
+void ATopDownTemplateGameGameMode::OnCharacterHitByDefender()
+{
+	RestartLevel();
+}
+
+void ATopDownTemplateGameGameMode::RestartLevel()
+{
 	// ResetLevel();
 	// RestartPlayer(GetWorld()->GetFirstPlayerController());
 
-	FString CurrentLevelName = *UGameplayStatics::GetCurrentLevelName(this);
-	FName CurrentLevelFName {*CurrentLevelName};
+	const FString CurrentLevelName = *UGameplayStatics::GetCurrentLevelName(this);
+	const FName CurrentLevelFName {*CurrentLevelName};
 	UGameplayStatics::OpenLevel(this, CurrentLevelFName);
 }
